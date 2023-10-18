@@ -47,6 +47,9 @@ const BlockDetails = ({ query }: Props) => {
 
   const { data, isPlaceholderData, isError, error } = query;
 
+  // filter 0xDeaD
+  data.tx_count = data.tx_count - 1;
+
   const handleCutClick = React.useCallback(() => {
     setIsExpanded((flag) => !flag);
     scroller.scrollTo('BlockDetails__cutLink', {

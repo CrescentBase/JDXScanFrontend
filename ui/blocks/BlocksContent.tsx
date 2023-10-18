@@ -78,7 +78,14 @@ const BlocksContent = ({ type, query }: Props) => {
     handler: handleNewBlockMessage,
   });
 
-  const content = query.data?.items ? (
+  // filter 0xDeaD
+  const dataItem = query.data?.items.map(item => {
+    if (item.tx_count >= 1) {
+      item.tx_count = item.tx_count - 1;
+    }
+  })
+
+  const content = dataItem ? (
     <>
       <Box display={{ base: 'block', lg: 'none' }}>
         { query.pagination.page === 1 && (
@@ -90,11 +97,11 @@ const BlocksContent = ({ type, query }: Props) => {
             isLoading={ query.isPlaceholderData }
           />
         ) }
-        <BlocksList data={ query.data.items } isLoading={ query.isPlaceholderData } page={ query.pagination.page }/>
+        <BlocksList data={ dataItem } isLoading={ query.isPlaceholderData } page={ query.pagination.page }/>
       </Box>
       <Box display={{ base: 'none', lg: 'block' }}>
         <BlocksTable
-          data={ query.data.items }
+          data={ dataItem }
           top={ query.pagination.isVisible ? 80 : 0 }
           page={ query.pagination.page }
           isLoading={ query.isPlaceholderData }
@@ -115,7 +122,7 @@ const BlocksContent = ({ type, query }: Props) => {
   return (
     <DataListDisplay
       isError={ query.isError }
-      items={ query.data?.items }
+      items={ dataItem }
       emptyText="There are no blocks."
       content={ content }
       actionBar={ actionBar }

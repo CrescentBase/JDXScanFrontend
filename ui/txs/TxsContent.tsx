@@ -42,7 +42,12 @@ const TxsContent = ({
   const { data, isPlaceholderData, isError, setSortByField, setSortByValue, sorting } = useTxsSort(query);
   const isMobile = useIsMobile();
 
-  const content = data?.items ? (
+  // filter 0xDeaD
+  const txs = data?.items.filter(tx => {
+    return tx.from != "0xDeaDDEaDDeAdDeAdDEAdDEaddeAddEAdDEAd0001" && tx.to != "0x4200000000000000000000000000000000000015"
+  });
+
+  const content = txs ? (
     <>
       <Show below="lg" ssr={ false }>
         <Box>
@@ -54,7 +59,7 @@ const TxsContent = ({
               isLoading={ isPlaceholderData }
             />
           ) }
-          { data.items.map((tx, index) => (
+          { txs.map((tx, index) => (
             <TxsListItem
               key={ tx.hash + (isPlaceholderData ? index : '') }
               tx={ tx }
@@ -68,7 +73,7 @@ const TxsContent = ({
       </Show>
       <Hide below="lg" ssr={ false }>
         <TxsTable
-          txs={ data.items }
+          txs={ txs }
           sort={ setSortByField }
           sorting={ sorting }
           showBlockInfo={ showBlockInfo }

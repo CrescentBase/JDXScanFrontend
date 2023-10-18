@@ -72,7 +72,13 @@ const LatestBlocks = () => {
   }
 
   if (data) {
-    const dataToShow = data.slice(0, blocksMaxCount);
+    // filter 0xDeaD
+    let dataToShow = data.slice(0, blocksMaxCount);
+    dataToShow = dataToShow.map((block) => {
+      if (block.tx_count >= 1) {
+        block.tx_count = block.tx_count - 1;
+      }
+    });
 
     content = (
       <>

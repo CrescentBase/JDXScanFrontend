@@ -22,19 +22,25 @@ const LatestTransactions = () => {
     },
   });
 
+  // filter 0xDeaD
+  let showData = data?.filter(tx => {
+    return tx.from != "0xDeaDDEaDDeAdDeAdDEAdDEaddeAddEAdDEAd0001" && tx.to != "0x4200000000000000000000000000000000000015"
+  });
+  showData = showData?.slice(0, txsCount)
+
   const { num, socketAlert } = useNewTxsSocket();
 
   if (isError) {
     return <Text mt={ 4 }>No data. Please reload page.</Text>;
   }
 
-  if (data) {
+  if (showData) {
     const txsUrl = route({ pathname: '/txs' });
     return (
       <>
         <SocketNewItemsNotice borderBottomRadius={ 0 } url={ txsUrl } num={ num } alert={ socketAlert } isLoading={ isPlaceholderData }/>
         <Box mb={ 3 } display={{ base: 'block', lg: 'none' }}>
-          { data.slice(0, txsCount).map(((tx, index) => (
+          { showData.map(((tx, index) => (
             <LatestTxsItemMobile
               key={ tx.hash + (isPlaceholderData ? index : '') }
               tx={ tx }
@@ -43,7 +49,7 @@ const LatestTransactions = () => {
           ))) }
         </Box>
         <Box mb={ 4 } display={{ base: 'none', lg: 'block' }}>
-          { data.slice(0, txsCount).map(((tx, index) => (
+          { showData.map(((tx, index) => (
             <LatestTxsItem
               key={ tx.hash + (isPlaceholderData ? index : '') }
               tx={ tx }
